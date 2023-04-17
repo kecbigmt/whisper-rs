@@ -82,7 +82,7 @@ fn main() {
         .arg(".")
         .arg("--config")
         .arg("Release")
-        .status()
+        .output()
         .expect("Failed to build libwhisper.a");
     if output.status.code() != Some(0) {
         panic!("Failed to build libwhisper.a: {}", std::str::from_utf8(output.stderr).unwrap());
