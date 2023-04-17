@@ -80,19 +80,13 @@ fn main() {
         panic!("Failed to generate build script (status code: {})", code.code().unwrap());
     }
 
-    let code = std::process::Command::new("cmake")
-        .arg("--build")
-        .arg(".")
-        .arg("--config")
-        .arg("Release")
-        .status()
-        .expect("Failed to build libwhisper.a");
-    if code.code() != None {
-        panic!("Failed to build libwhisper.a (status code: none)");
-    }
-    if code.code() != Some(0) {
-        panic!("Failed to build libwhisper.a (status code: {})", code.code().unwrap());
-    }
+    std::process::Command::new("cmake")
+    .arg("--build")
+    .arg(".")
+    .arg("--config")
+    .arg("Release")
+    .status()
+    .expect("Failed to build libwhisper.a");
 
     // move libwhisper.a to where Cargo expects it (OUT_DIR)
     #[cfg(target_os = "windows")]
