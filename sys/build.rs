@@ -91,7 +91,7 @@ fn main() {
         panic!("Failed to build libwhisper.a (status code: none)");
     }
     if code.code() != Some(0) {
-        panic!("Failed to build libwhisper.a (status code: {}})", code.code().unwrap());
+        panic!("Failed to build libwhisper.a (status code: {})", code.code().unwrap());
     }
 
     // move libwhisper.a to where Cargo expects it (OUT_DIR)
