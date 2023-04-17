@@ -73,8 +73,11 @@ fn main() {
         .arg("-DWHISPER_BUILD_EXAMPLES=OFF")
         .status()
         .expect("Failed to generate build script");
+    if code.code() != None {
+        panic!("Failed to generate build script (status code: none)");
+    }
     if code.code() != Some(0) {
-        panic!("Failed to generate build script (status code: {})", code.code());
+        panic!("Failed to generate build script (status code: {})", code.code().unwrap());
     }
 
     let code = std::process::Command::new("cmake")
@@ -84,8 +87,11 @@ fn main() {
         .arg("Release")
         .status()
         .expect("Failed to build libwhisper.a");
+    if code.code() != None {
+        panic!("Failed to build libwhisper.a (status code: none)");
+    }
     if code.code() != Some(0) {
-        panic!("Failed to build libwhisper.a (status code: {})", code.code());
+        panic!("Failed to build libwhisper.a (status code: {}})", code.code().unwrap());
     }
 
     // move libwhisper.a to where Cargo expects it (OUT_DIR)
