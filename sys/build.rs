@@ -74,7 +74,7 @@ fn main() {
         .status()
         .expect("Failed to generate build script");
     if code.code() != Some(0) {
-        panic!("Failed to generate build script");
+        panic!("Failed to generate build script (status code: {})", code.code());
     }
 
     let code = std::process::Command::new("cmake")
@@ -85,7 +85,7 @@ fn main() {
         .status()
         .expect("Failed to build libwhisper.a");
     if code.code() != Some(0) {
-        panic!("Failed to build libwhisper.a");
+        panic!("Failed to build libwhisper.a (status code: {})", code.code());
     }
 
     // move libwhisper.a to where Cargo expects it (OUT_DIR)
