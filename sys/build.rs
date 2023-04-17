@@ -63,7 +63,7 @@ fn main() {
     _ = std::fs::create_dir("build");
     env::set_current_dir("build").expect("Unable to change directory to whisper.cpp build");
 
-    let code = std::process::Command::new("cmake")
+    let output = std::process::Command::new("cmake")
         .arg("..")
         .arg("-DCMAKE_BUILD_TYPE=Release")
         .arg("-DBUILD_SHARED_LIBS=OFF")
@@ -71,27 +71,21 @@ fn main() {
         .arg("-DWHISPER_ALL_WARNINGS_3RD_PARTY=OFF")
         .arg("-DWHISPER_BUILD_TESTS=OFF")
         .arg("-DWHISPER_BUILD_EXAMPLES=OFF")
-        .status()
+        .output()
         .expect("Failed to generate build script");
-    if code.code() == None {
-        panic!("Failed to generate build script (status code: none)");
-    }
-    if code.code() != Some(0) {
-        panic!("Failed to generate build script (status code: {})", code.code().unwrap());
+    if output.status.code() != Some(0) {
+        panic!("Failed to generate build script: {}", std::str.from_utf8(output.stderr).unwrap());
     }
 
-    let code = std::process::Command::new("cmake")
+    let output = std::process::Command::new("cmake")
         .arg("--build")
         .arg(".")
         .arg("--config")
         .arg("Release")
         .status()
         .expect("Failed to build libwhisper.a");
-    if code.code() == None {
-        panic!("Failed to build libwhisper.a (status code: none)");
-    }
-    if code.code() != Some(0) {
-        panic!("Failed to build libwhisper.a (status code: {})", code.code().unwrap());
+    if output.status.code() != Some(0) {
+        panic!("Failed to build libwhisper.a: {}", std::str.from_utf8(output.stderr).unwrap());
     }
 
     // move libwhisper.a to where Cargo expects it (OUT_DIR)
